@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Happy Birthday</title>
+
+<!--
+  ============================================================
+  HOW TO USE THIS SITE (read before uploading to GitHub)
+  ============================================================
+  1. Create a folder called "assets" next to this index.html.
+  2. Drop your files in with these EXACT names (or edit the
+     paths below to match your own filenames):
+
+     assets/photo1.jpg        -> first photo (top-left)
+     assets/photo2.jpg        -> second photo (top-right)
+     assets/photo3.jpg        -> third photo (bottom-center)
+     assets/video1.mp4        -> first video (top page)
+     assets/video2.mp4        -> second video (bottom page)
+     assets/message.mp3       -> YOUR recorded voice message
+     assets/bg-music.mp3      -> ambient background music (loops)
+     assets/reveal.jpg        -> heart-shaped photo shown when she taps "Yes"
+     assets/ending-photo.jpg  -> final square photo on the very last slide
+
+  3. Search this file for "REPLACE" to find every spot where you
+     should swap in your own note/message text.
+  4. Push everything (index.html, style.css, script.js, assets/)
+     to your GitHub repo and enable GitHub Pages.
+
+  SLIDE MAP (8 slides total, one swipe = one slide):
+     1. hero      - "my love" caption + "Happy Birthday 🎂"
+     2. photos    - 3 tilted journal pages
+     3. videos    - 2 videos, each on its own journal page
+     4. player    - recorded message, music auto-pauses/resumes
+     5. question  - "does she love me?" Yes -> heart animation
+                    zooms toward viewer then vanishes, right on
+                    this same slide, then a bouquet pops up.
+                    No dodges the cursor; after 3 presses the
+                    heartbreak animation plays briefly, then resets.
+     6. finale    - the closing note. Roses/hearts/kisses drift here.
+     7. thankyou  - "thank you for existing, and for being mine"
+     8. ending    - "Happy Birthday" pops in, then pops outward and
+                    fades, revealing a square photo with birthday
+                    icons orbiting circularly around it.
+  ============================================================
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,500&family=Quicksand:wght@400;500;600&family=Dancing+Script:wght@600;700&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============ OPENING ANIMATION ============ -->
+<div id="introOverlay" class="intro-overlay">
+  <div class="intro-heart" id="introHeart">&#10084;</div>
+  <p class="intro-eyebrow">a little universe, just for</p>
+  <h2 class="display italic intro-name">my love</h2>
+  <button id="introBtn" class="intro-btn">open it</button>
+</div>
+
+<!-- Starfield / 3D depth canvas, sits behind everything -->
+<canvas id="stars"></canvas>
+
+<!-- floating "now playing" indicator -->
+<div id="miniPlayer" class="mini-player hidden">
+  <span class="mini-note">&#9835;</span>
+  <span class="mini-label">now playing</span>
+</div>
+
+<!-- audio: ambient background music + her personal recorded message -->
+<audio id="bgMusic" src="assets/bg-music.mp3" loop preload="none"></audio>
+<audio id="message" src="assets/message.mp3" preload="none"></audio>
+
+<!-- side progress dots, one per slide -->
+<nav class="dots" aria-hidden="true">
+  <span data-target="hero" class="dot active"></span>
+  <span data-target="photos" class="dot"></span>
+  <span data-target="videos" class="dot"></span>
+  <span data-target="player" class="dot"></span>
+  <span data-target="question" class="dot"></span>
+  <span data-target="finale" class="dot"></span>
+  <span data-target="thankyou" class="dot"></span>
+  <span data-target="ending" class="dot"></span>
+</nav>
+
+<main class="scroller">
+<div class="track">
+
+  <!-- ============ SLIDE 1: HERO ============ -->
+  <section id="hero" class="panel hero">
+    <p class="eyebrow">my love</p>
+    <h1 class="display italic">Happy Birthday <span class="cake">&#127874;</span></h1>
+    <p class="lead">
+      REPLACE: your opening romantic message goes here — a few sentences
+      that set the tone before she swipes any further.
+    </p>
+    <div class="scroll-hint">
+      <span>swipe up</span>
+      <div class="arrow"></div>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 2: THREE PHOTOS, ONE SLIDE ============ -->
+  <section id="photos" class="panel photos-panel">
+    <div class="photo-grid">
+      <div class="poster poster--small tilt-a pos-top-left">
+        <div class="poster-photo">
+          <img src="assets/photo1.jpg" alt="A memory, photo one" onerror="this.style.display='none'; this.parentElement.classList.add('img-missing')">
+        </div>
+        <p class="poster-note">REPLACE: note one</p>
+      </div>
+      <div class="poster poster--small tilt-b pos-top-right">
+        <div class="poster-photo">
+          <img src="assets/photo2.jpg" alt="A memory, photo two" onerror="this.style.display='none'; this.parentElement.classList.add('img-missing')">
+        </div>
+        <p class="poster-note">REPLACE: note two</p>
+      </div>
+      <div class="poster poster--small tilt-c pos-bottom-center">
+        <div class="poster-photo">
+          <img src="assets/photo3.jpg" alt="A memory, photo three" onerror="this.style.display='none'; this.parentElement.classList.add('img-missing')">
+        </div>
+        <p class="poster-note">REPLACE: note three</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 3: TWO VIDEOS, ONE SLIDE ============ -->
+  <section id="videos" class="panel videos-panel">
+    <div class="video-stack">
+      <div class="poster video-card tilt-a">
+        <video controls playsinline poster="assets/photo1.jpg">
+          <source src="assets/video1.mp4" type="video/mp4">
+        </video>
+        <p class="poster-note">REPLACE: note for video one</p>
+      </div>
+      <div class="poster video-card tilt-b">
+        <video controls playsinline poster="assets/photo2.jpg">
+          <source src="assets/video2.mp4" type="video/mp4">
+        </video>
+        <p class="poster-note">REPLACE: note for video two</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 4: RECORDED MESSAGE ============ -->
+  <section id="player" class="panel player-panel">
+    <h2 class="display italic section-title">a recorded message</h2>
+    <div class="cd-wrap">
+      <div class="cd" id="cd">
+        <div class="cd-hole"></div>
+      </div>
+    </div>
+    <button id="playBtn" class="play-btn" aria-label="Play message">
+      <span class="icon">&#9658;</span>
+    </button>
+  </section>
+
+  <!-- ============ SLIDE 5: QUESTION ============ -->
+  <section id="question" class="panel question-panel">
+    <div class="question-photo">
+      <img src="assets/photo3.jpg" alt="" onerror="this.style.display='none'">
+    </div>
+    <h2 class="display italic" id="questionTitle">does she love me?</h2>
+    <div class="answer-row" id="answerRow">
+      <button id="yesBtn" class="answer yes">yes</button>
+      <button id="noBtn" class="answer no">no</button>
+    </div>
+
+    <div id="heartbreak" class="heartbreak hidden">
+      <div class="crack">&#128148;</div>
+      <p>ouch. let's try that again.</p>
+    </div>
+
+    <!-- inline reveal: stays on THIS slide, heart zooms toward viewer
+         and vanishes, then a bundled bouquet pops up in its place -->
+    <div id="revealStage" class="reveal-stage hidden">
+      <div class="reveal-heart-burst" id="revealHeartBurst">&#10084;</div>
+      <div id="revealContent" class="reveal-content hidden">
+        <img src="assets/reveal.jpg" class="heart-clip" alt="Reveal photo" onerror="this.style.display='none'">
+        <div class="bouquet-wrap">
+          <div class="bouquet-bundle">
+            <span>&#127801;</span><span>&#127801;</span><span>&#127801;</span><span>&#127801;</span><span>&#127801;</span>
+          </div>
+          <div class="bouquet-cover"></div>
+        </div>
+        <p class="poster-note">REPLACE: caption shown with the reveal photo</p>
+        <button id="resetQuestion" class="close-reveal">ask again</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 6: FINALE ============ -->
+  <section id="finale" class="panel finale-panel">
+    <p class="script-note">
+      REPLACE: your final, most heartfelt happy birthday note goes here —
+      write it exactly the way you'd say it to her in person.
+    </p>
+    <p class="signoff">— [REPLACE: your name]</p>
+  </section>
+
+  <!-- ============ SLIDE 7: THANK YOU ============ -->
+  <section id="thankyou" class="panel thankyou-panel">
+    <p class="script-note">Thank you for existing,<br>and for being mine.</p>
+  </section>
+
+  <!-- ============ SLIDE 8: ENDING ============ -->
+  <section id="ending" class="panel ending-panel">
+    <h2 class="display italic ending-title" id="endingTitle">Happy Birthday</h2>
+    <div class="ending-photo-wrap hidden" id="endingPhotoWrap">
+      <div class="orbit-ring" aria-hidden="true">
+        <span class="orbit-item">&#127881;</span>
+        <span class="orbit-item">&#127882;</span>
+        <span class="orbit-item">&#10084;</span>
+        <span class="orbit-item">&#127775;</span>
+        <span class="orbit-item">&#127882;</span>
+        <span class="orbit-item">&#127881;</span>
+      </div>
+      <div class="ending-photo">
+        <img src="assets/ending-photo.jpg" alt="A final memory" onerror="this.style.display='none'; this.parentElement.classList.add('img-missing')">
+      </div>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
