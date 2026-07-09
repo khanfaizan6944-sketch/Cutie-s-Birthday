@@ -14,7 +14,7 @@
     const bgMusic = document.getElementById('bgMusic');
     bgMusic.play().then(() => {
       document.getElementById('miniPlayer').classList.remove('hidden');
-    }).catch(() => { /* she hasn't added assets/bg-music.mp3 yet */ });
+    }).catch(() => { });
   });
 })();
 
@@ -218,7 +218,7 @@ const pager = (function pagedScroll(){
       cd.classList.add('spinning');
       setIcon(true);
       miniPlayer.classList.remove('hidden');
-    }).catch(() => { /* assets/message.mp3 not added yet */ });
+    }).catch(() => { });
   }
 
   function stopMessage(){
