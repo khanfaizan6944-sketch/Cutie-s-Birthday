@@ -9,12 +9,12 @@
   btn?.addEventListener('click', () => {
     heart.classList.add('burst');
     overlay.classList.add('opening');
-    setTimeout(() => overlay.remove(), 1100);
-
-    const bgMusic = document.getElementById('bgMusic');
+    setTimeout(() => overlay.remove(), 1100);const bgMusic = document.getElementById('bgMusic');
     bgMusic.play().then(() => {
       document.getElementById('miniPlayer').classList.remove('hidden');
     }).catch(() => { });
+
+    
   });
 })();
 
